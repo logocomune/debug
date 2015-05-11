@@ -1,0 +1,21 @@
+{
+    "name": "logocomune/debug",
+    "version":"1.0.0",
+    "description": "simple debugging tool which prints human-readable information about a variable.",
+    "keywords": ["debug", "debugging", "html", "cli", "print_r", "var_dump", "var_export"],
+    "require": {
+        "php": ">=5.3.3"
+    },
+    "autoload": {
+      "files": ["src/Logocomune/Debug/debug-func.php"],
+      "psr-4": {
+            "Logocomune\\": "src/Logocomune/Debug"
+        }
+    },
+    "authors": [
+        {
+            "name": "Alessandro Lucaferro",
+            "email": "alessandro.lucaferro@gmail.com"
+        }
+    ]
+}
