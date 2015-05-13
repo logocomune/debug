@@ -9,7 +9,7 @@ Alternatively, you can specify Debug as a dependency in your project’s existin
 ```json
 {
  "require-dev": {
-    "logocomune/debug": "~1.0"
+    "logocomune/debug": "~1.1"
  }
 }
 ```
@@ -38,12 +38,18 @@ Available features:
 // Dump a variable with
 
 // print_r (default mode)
-\Logocomune\Debug::renderAs('print_r');
+\Logocomune\Debug::renderAsPrintR();
 
 // var_dump
-\Logocomune\Debug::renderAs('var_dump');
+\Logocomune\Debug::renderAsVarDump();
+
 
 // var_export
-\Logocomune\Debug::renderAs('var_export');
+\Logocomune\Debug::renderAsVarExport();
+
+
+// Symfony mechanism for exploring and dumping PHP variables
+\Logocomune\Debug::renderAsSymVarDump();
+
 
 ```

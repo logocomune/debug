@@ -31,7 +31,8 @@ if (!function_exists('de')) {
     function de($var)
     {
 
-        \Logocomune\Debug::debug($var, 2);
-        exit;
+        if (\Logocomune\Debug::debug($var, 2) !== null) {
+            exit;
+        }
     }
 }

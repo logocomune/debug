@@ -1,5 +1,6 @@
 <?php
 namespace Logocomune;
+use Symfony\Component\VarDumper\VarDumper;
 
 /**
  *
@@ -13,7 +14,7 @@ class Debug
 {
 
     static private $conf = array(
-        'render_method' => 'print_r',//'var_dump','print_r','var_export  [display variable]
+        'render_method' => 'print_r',//'var_dump','print_r','var_export','symfony_var_dump'  [display variable]
         'float_decimal' => 3, //decimal precision
         'html' => null, //Custom Html template
         'text' => null, //Custom text
@@ -39,15 +40,33 @@ class Debug
             case'var_export':
                 static::$conf['render_method'] = 'var_export';
                 break;
+            case 'symfony_var_dump':
+                static::$conf['render_method'] = 'symfony_var_dump';
+                break;
             default:
 
             case'print_r':
                 static::$conf['render_method'] = 'print_r';
                 break;
-
-
         }
     }
+
+    public static function renderAsVarDump(){
+        static::renderAs('var_dump');
+    }
+
+    public static function renderAsVarExport(){
+        static::renderAs('var_export');
+    }
+
+    public static function renderAsSymVarDump(){
+        static::renderAs('symfony_var_dump');
+    }
+
+    public static function renderAsPrintR(){
+        static::renderAs('print_r');
+    }
+
 
     /**
      * Enable backtrace
@@ -204,11 +223,18 @@ class Debug
     {
         if (static::$conf['html'] == null) {
             $html = <<<HTML
-<div class="lcf_debug_cnt" style="z-index:9999; background-color:rgba(225,225,225,0.9);position:relative;border-color:red;border-style:dotted;border-width:2px;padding:10px;color:black">
+<div class="lcf_debug_cnt" style="z-index:9999; background-color:rgba(225,225,225,0.9)!important;position:relative;border-color:red;border-style:dotted;border-width:2px;padding:10px;color:black">
 <div class="lcf_text_info"><b>%s</b> (line: <b>%s</b>) [Memory: %s MB (peak: %s MB)]</div>
 <div class="lcf_text_var">
 <i>%s</i>
-<pre style="z-index:1000000; background-color:rgba(124,252,0,0.5);position:relative">%s</pre></div>
+HTML;
+            if (static::$conf['render_method'] !== 'symfony_var_dump') {
+                $html .= '<pre style = "z-index:1000000; background-color:rgba(124,252,0,0.5);position:relative" >%s </pre >';
+            } else {
+                $html .= "%s";
+            }
+            $html .= <<<HTML
+            </div>
 <div class="trace">%s</div>
 </div>
 HTML;
@@ -273,6 +299,12 @@ TEXT;
             case 'print_r':
                 ob_start();
                 print_r($this->var);
+                $var = ob_get_clean();
+
+                break;
+            case 'symfony_var_dump':
+                ob_start();
+                VarDumper::dump($this->var);
                 $var = ob_get_clean();
                 break;
             case 'var_export':
